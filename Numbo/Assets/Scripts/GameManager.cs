@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -9,10 +10,22 @@ public class GameManager : MonoBehaviour {
     public string pressedKey;
     public int score = 0;
 
+    // GUI references
+    public Text scoreText;
+    public Text goalText;
+    public Text answerText;
 
 
-	// Use this for initialization
-	void Start () {
+
+
+    // Set references to the GUI texts and initialize the first goal number
+    void Start () {
+
+        scoreText = GameObject.Find("ScoreText").GetComponent<Text>();
+        goalText = GameObject.Find("GoalText").GetComponent<Text>();
+        answerText = GameObject.Find("AnswerText").GetComponent<Text>();
+
+
         goalNumber = Random.Range(1, 11);
 	}
 
@@ -59,23 +72,8 @@ public class GameManager : MonoBehaviour {
             sum = 0;
         }
 
-    }
-
-    void OnGUI()
-    {
-        // display the number to solve
-        GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, 100, 30), "Solve: " + goalNumber);
-
-        // display the working sum
-        GUI.Label(new Rect(Screen.width / 2, Screen.height / 2 + (Screen.height / 3), 100, 30), "Answer " + sum);
-
-        // display the score at the top of the screen
-        GUI.Label(new Rect(0, 0, 200, 30), "Score: " + score);
-
-        // display the rules on the side of the screen
-        GUI.Label(new Rect(Screen.width * 0.75f, 0, 200, 400), "Use combinations of 1, 2, and 3 to solve for the number.\nPress enter to submit" +
-        " your answer.\nWrong answers or going over the goal number will cost you a point.");
-
+        // update the GUI
+        UpdateGUI();
     }
 
     // check if the working sum goes over the goal number, if it does, subtract from the score
@@ -93,5 +91,18 @@ public class GameManager : MonoBehaviour {
         {
             sum += value;
         }
+    }
+
+    // update the GUI text to repsond to the player's input
+    void UpdateGUI()
+    {
+        answerText.text = "Answer:\n" + sum;
+        goalText.text = "Solve:\n" + goalNumber;
+        scoreText.text = "Score: " + score;
+
+        //TODO
+        //    // display the rules on the side of the screen
+        //    GUI.Button(new Rect(Screen.width * 0.75f, 0, 200, 400), "Use combinations of 1, 2, and 3 to solve for the number.\nPress enter to submit" +
+        //    " your answer.\nWrong answers or going over the goal number will cost you a point.");
     }
 }
